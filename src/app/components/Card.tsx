@@ -1,25 +1,26 @@
 "use client";
-import Image from 'next/image'
-import type { CardData } from '../types/CardTypes';
+import React from 'react';
 
-// type CardProps = {
-//     name: string;
-//     set: string;
-//     cost: number;
-//     power: number;
-//     hp: string;
-//     type: string;
-//     traits: string[];
-//     rarity: string;
-//     frontArt: string;
-// };
 
-export default function Card({ name, set, cost, power, hp, type, traits, rarity, frontArt }: any) {
+
+type CardProps = {
+    name: string;
+    set: string;
+    cost: number;
+    power: number;
+    hp: string;
+    type: string;
+    traits: string[];
+    rarity: string;
+    frontArt: string;
+};
+
+export default function Card({ name, set, cost, power, hp, type, traits, rarity, frontArt }: CardProps) {
     return (
         <div className="card border border-gray-400 rounded-lg p-2 m-2 flex items-center bg-gray-800 text-white shadow-lg">
             {/* Left Image Section */}
             <div className="w-32 h-32 flex-shrink-0 mr-4">
-                <Image src={frontArt} alt={name} className="w-full h-full object-cover rounded-lg" height={200} width={200} />
+                <Image src={frontArt} alt={name} className="w-full h-full object-cover rounded-lg" />
             </div>
 
             {/* Right Text Section */}
