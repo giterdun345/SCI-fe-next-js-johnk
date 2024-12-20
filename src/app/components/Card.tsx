@@ -6,9 +6,9 @@ import { CardData } from '../types/CardTypes';
 
 export default function Card({ name, set, cost, power, hp, type, traits, rarity, frontArt }: CardData) {
     return (
-        <div className="border border-gray-400 rounded-lg p-2 m-2 flex items-center bg-gray-800 text-white shadow-lg">
+        <div className="bg-white dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl flex items-center">
             {/* Left Image Section */}
-            <div className="w-32 h-32 flex-shrink-0 mr-4">
+            <div className="size-32 shrink-0 mr-4">
                 <Image src={frontArt} alt={name} className="object-cover rounded-lg" width={300} height={300} />
             </div>
 

@@ -7,10 +7,9 @@ export default function Page() {
   const [selectedHp, setSelectedHp] = useState<string>('');
 
   return (
-      <main>
-        <h1>Card Browser</h1>
-        <Dropdown onSelect={setSelectedHp} />
-        {selectedHp && <CardList hp={selectedHp} />}
-      </main>
+    <div  >
+      <Dropdown onSelect={setSelectedHp} />
+      {selectedHp && <CardList hp={selectedHp} />}
+    </div>
   );
 }

@@ -7,6 +7,7 @@ type CardListProps = {
     hp: string;
 };
 
+type SortKey = 'name' | 'set' | 'cost' | 'power'
 
 /**
  * A component that displays a list of cards, sorted by a specified key.
@@ -18,7 +19,7 @@ export default function CardList({ hp }: CardListProps) {
     const [cards, setCards] = useState<CardData[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [sortKey, setSortKey] = useState<keyof CardData>('name');
+    const [sortKey, setSortKey] = useState<SortKey>('name');
 
     useEffect(() => {
         if (!hp) return;
@@ -27,13 +28,13 @@ export default function CardList({ hp }: CardListProps) {
 
         async function fetchCards() {
             try {
-                const res = await fetch(`/api/search?hp=${hp}`);
+                const res = await fetch(`/api/search?hp=${encodeURIComponent(hp)}`);
                 if (!res.ok) throw new Error('Failed to fetch cards');
                 const data = await res.json();
                 console.log("|-o-| CL: data", data);
 
                 const formattedCards = Array.isArray(data.data)
-                    ? data.data.map((card: any) => ({
+                    ? data.data.map((card: any) => ({ // TODO: type response
                         set: card.Set,
                         number: card.Number,
                         name: card.Name,
@@ -54,7 +55,7 @@ export default function CardList({ hp }: CardListProps) {
                         foilprice: card.FoilPrice,
                         frontArt: card.FrontArt,
                         id: `${card.Set}-${card.Number}` // Creating a unique ID using set and number
-                    })).sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1))
+                    })).sort((a: CardData, b: CardData) => (a[sortKey] > b[sortKey] ? 1 : -1))
                     : [];
 
                 setCards(formattedCards);
@@ -72,7 +73,7 @@ export default function CardList({ hp }: CardListProps) {
         fetchCards();
     }, [hp, sortKey]);
 
-    function sortCards(key: keyof CardData) {
+    function sortCards(key: SortKey) {
         setSortKey(key);
         setCards([...cards].sort((a, b) => (a[key] > b[key] ? 1 : -1)));
     }
@@ -101,6 +102,18 @@ export default function CardList({ hp }: CardListProps) {
                     <Card key={card.id} {...card} />
                 ))}
             </div>
+
+            {/* <div className="flex flex-col sm:flex-row ...">
+  <div className="flex-1 ...">
+    ...
+  </div>
+  <div className="flex-1 ...">
+    ...
+  </div>
+  <div className="flex-1 ...">
+    ...
+  </div>
+</div> */}
         </section>
     );
 }
