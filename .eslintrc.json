@@ -20,9 +20,10 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-explicit-any": "warn",
     "no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-ts-comment": "off",
     "tailwindcss/classnames-order": "off",
     "tailwindcss/no-custom-classname": "off"
   }

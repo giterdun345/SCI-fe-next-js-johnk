@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./styles/globals.css";
 import ThemeProvider from "./ThemeProvider";
-import Header from "./components/Header";
+import Header from "./components/Layout/HeaderMain";
 
 
 const geistSans = localFont({
@@ -30,14 +30,15 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
-          <Header />
-          {children}
+          <div className="relative">
+            <Header />
+            <div className='pt-52'>
+              {children}
+            </div>
+          </div>
         </ThemeProvider>
-
       </body>
     </html>
   );

@@ -1,15 +1,16 @@
-'use client';
+"use client"
+
 import React, { useState } from 'react';
-import Dropdown from './components/Dropdown';
+import DropdownMain from './components/Dropdown/DropdownMain';
 import CardList from './components/CardList';
 
 export default function Page() {
   const [selectedHp, setSelectedHp] = useState<string>('');
 
   return (
-    <div  >
-      <Dropdown onSelect={setSelectedHp} />
+    <>
+      <DropdownMain onSelect={setSelectedHp} />
       {selectedHp && <CardList hp={selectedHp} />}
-    </div>
+    </>
   );
 }
