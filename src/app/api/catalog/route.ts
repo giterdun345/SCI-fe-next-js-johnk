@@ -1,14 +1,32 @@
-// app/api/catalog/route.ts
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
+import { cache } from "react";
+import "server-only";
+
+const fetchHpOptions = cache(async () => {
+  try {
+    const res = await fetch("https://api.swu-db.com/catalog/hps");
+
+    if (!res.ok) {
+      return { error: "Failed to fetch data from external API" };
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("API Request Error:", error);
+    return { error: "Error during data fetch" };
+  }
+});
 
 export async function GET() {
-    try {
-        const res = await fetch('https://api.swu-db.com/catalog/hps');
-        if (!res.ok) throw new Error('Failed to fetch data');
-        const data = await res.json();
-        return NextResponse.json(data);
-    } catch (error) {
-        console.error('Catalog API Error:', error); // Log the error for debugging
-        return NextResponse.json({ error: 'Failed to fetch catalog data' }, { status: 500 });
-    }
+  const { data, error } = await fetchHpOptions();
+
+  if (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
+
+  const filteredHpOptions = data.filter(
+    (option: string) => !option.includes("+"),
+  );
+
+  return NextResponse.json(filteredHpOptions);
 }

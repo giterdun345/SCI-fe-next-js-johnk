@@ -34,7 +34,7 @@ function Beam({ index }: { index: number }) {
                     "h-12": !flag,
                 })}
             >
-                <div className={`h-full w-full ${beamColor}`} />
+                <div className={`size-full ${beamColor}`} />
             </div>
         </div>
     );
@@ -74,9 +74,8 @@ function Background() {
     return (
         <div
             ref={containerRef}
-            className="-z-1 absolute inset-0 flex h-full w-full flex-row justify-between bg-gradient-to-t from-ring-slate-900 to-ring-slate-950"
+            className="-z-1 absolute inset-0 flex size-full flex-row justify-between bg-gradient-to-t from-ring-slate-900 to-ring-slate-950"
         >
-
             {Array.from({ length: count }, (_, i) => (
                 <div key={i} className="relative h-full w-px rotate-12">
                     {(1 + i) % 4 === 0 && <Beam index={i + 1} />}
@@ -96,7 +95,7 @@ export default function AnimatedBeam({
     return (
         <div className={cn("storybook-fix relative w-full overflow-hidden", className)}>
             <Background />
-            <div className="relative h-full w-full">{children}</div>
+            <div className="relative size-full">{children}</div>
         </div>
     );
 }

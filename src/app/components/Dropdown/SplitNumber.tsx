@@ -1,16 +1,17 @@
 import { useRef, useState } from "react";
-
 import { cn } from "@libs/utils";
+
+interface SplitNumberProps {
+    text: string;
+    className?: string;
+}
 
 export default function SplitNumber({
     text = "0",
     className,
-}: {
-    text: string;
-    className?: string;
-}) {
+}: SplitNumberProps) {
     const [activeIndex, setIndex] = useState<number>();
-    const timer = useRef<NodeJS.Timeout>();
+    const timer = useRef<ReturnType<typeof setTimeout>>();
 
     const letterClassName =
         "inline h-1/2 select-none overflow-y-hidden leading-none transition-all duration-300 ease-out whitespace-pre";
