@@ -1,16 +1,19 @@
 # **Sports Card Investor Next.js Dev Challenge**
 
 The following are bullet points of the process, the roadblocks, and the discoveries made during its development. The instructions to run the app locally are also provided.
+
 ---
 
-## **Instructions for running the app **
-- Start by cloning the repo on your local machine with:
+## ** Instructions for getting started **
+- Start by cloning the repo on your local machine with:<br/>
 ```git clone https://github.com/giterdun345/SCI-fe-next-js-johnk.git```
 
-- Next enter the root directory, install the dependencies and run the app:
+
+- Next enter the root directory, install the dependencies and run the app: <br/>
 ```cd SCI-fe-next-js-johnk && pnpm install && pnpm dev```
 
-This will start the application by first running the linting checks and running the tests. Then upon success, open the project in your browser at 
+This will start the application by first running the linting checks and running the tests. 
+Then upon success, open the project in your browser at <br/>
 ```http://localhost:3000```
 ---
 
