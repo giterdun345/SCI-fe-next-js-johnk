@@ -5,28 +5,30 @@ import "server-only";
 const fetchHpOptions = cache(async () => {
   try {
     const res = await fetch("https://api.swu-db.com/catalog/hps");
-
+    console.log("res", res);
     if (!res.ok) {
-      return { error: "Failed to fetch data from external API" };
+      throw new Error("Failed to fetch data from external API");
     }
 
-    return await res.json();
+    const data = await res.json();
+    console.log("filteredOptions", data);
+    return data;
   } catch (error) {
     console.error("API Request Error:", error);
-    return { error: "Error during data fetch" };
+    return { error: "Failed to fetch catalog data" };
   }
 });
 
 export async function GET() {
-  const { data, error } = await fetchHpOptions();
+  const res = await fetchHpOptions();
 
-  if (error) {
-    return NextResponse.json({ error }, { status: 500 });
+  if (res?.error) {
+    return NextResponse.json({ error: res.error }, { status: 500 });
   }
 
-  const filteredHpOptions = data.filter(
+  const filteredHpOptions = res.data.filter(
     (option: string) => !option.includes("+"),
   );
 
-  return NextResponse.json(filteredHpOptions);
+  return NextResponse.json({ ...res, data: filteredHpOptions });
 }

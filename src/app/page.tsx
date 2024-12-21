@@ -1,41 +1,27 @@
-import React, { useState } from 'react';
-import { DropdownMain } from '@components/Dropdown/DropdownMain';
-import CardList from '@components/CardList';
-import { MainPageType } from '@customTypes/MainPageTypes';
-
+import MainComponent from "@components/MainComponent";
 
 export default async function Page() {
-  let hpOptions = []
-  let errorMessage = ""
+  let response = { data: [] };
+  let errorMessage = "";
 
   try {
-    const res = await fetch("https://api.swu-db.com/catalog/hps");
+    const res = await fetch('https://api.swu-db.com/catalog/hps');
 
     if (!res.ok) {
-      errorMessage = "Failed to fetch data from external API"
+      errorMessage = "Failed to fetch data from external API";
+      response = { data: [] };
+    } else {
+      response = await res.json();
     }
-
-    hpOptions = await res.json();
-
   } catch (error) {
     console.error("API Request Error:", error);
-    errorMessage = "Error during data fetch"
+    errorMessage = "Error during data fetch";
+    response = { data: [] };
   }
 
-  return (
-    <MainPage hpOptions={hpOptions} errorMessage={errorMessage} />
-  );
-}
-
-
-function MainPage({ hpOptions, errorMessage }: { hpOptions: string[], errorMessage: string }) {
-  const [selectedHp, setSelectedHp] = useState<string>('');
+  const filteredOptions = response.data.filter((option: string) => !option.includes("+"))
 
   return (
-    <div>
-      <DropdownMain onSelect={setSelectedHp} hpOptions={hpOptions} errorMessage={errorMessage} />
-      {selectedHp && <CardList hp={selectedHp} />}
-    </div>
+    <MainComponent hpOptions={filteredOptions} errorMessage={errorMessage} />
   );
 }
-
