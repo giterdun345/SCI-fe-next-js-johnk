@@ -18,7 +18,7 @@ type SortKey = 'name' | 'set' | 'cost' | 'power'
 
 export default function CardList({ hp }: CardListProps) {
     const [cards, setCards] = useState<CardData[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);  // TODO: custom hook for fetch cards
     const [error, setError] = useState<string | null>(null);
     const [sortKey, setSortKey] = useState<SortKey>('name');
 
@@ -30,12 +30,12 @@ export default function CardList({ hp }: CardListProps) {
         async function fetchCards() {
             try {
                 const res = await fetch(`/api/search?hp=${encodeURIComponent(hp)}`);
-                if (!res.ok) throw new Error('Failed to fetch cards');
+                if (!res.ok) setError('Failed to fetch cards');
                 const data = await res.json();
                 console.log("|-o-| CL: data", data);
 
                 const formattedCards = Array.isArray(data.data)
-                    ? data.data.map((card: any) => ({ // TODO: type response / clean up
+                    ? data.data.map((card: any) => ({ // TODO: type response / clean up and cache
                         set: card.Set,
                         number: card.Number,
                         name: card.Name,
@@ -83,6 +83,7 @@ export default function CardList({ hp }: CardListProps) {
     return (
         <section className="p-6">
             <div className="flex justify-center gap-4 mb-6">
+                {/* // TODO: lazy load */}
                 <button onClick={() => sortCards('name')} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Sort by Name
                 </button>
@@ -96,8 +97,10 @@ export default function CardList({ hp }: CardListProps) {
                     Sort by Power
                 </button>
             </div>
-            {loading && <p className="text-center text-lg font-semibold">Loading cards...</p>}
-            {error && <p className="text-center text-red-500 text-lg font-semibold">Error: {error}</p>}
+            <div className='h-10 w-full m-3'>
+                {loading && <p className="text-center text-lg font-semibold">Loading cards...</p>}
+                {error && <p className="text-center text-red-500 text-lg font-semibold">Error: {error}</p>}
+            </div>
             <div className="flex flex-wrap justify-center mt-10">
                 {cards.map((card) => (
                     <FlipCard key={card.id} {...card} />
