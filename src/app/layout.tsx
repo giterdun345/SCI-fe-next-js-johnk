@@ -18,7 +18,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Coding Challenge",
+  title: "Ketterer- Next.js Coding Challenge",
   description: "John Ketterer's coding challenge with next.js ",
 };
 

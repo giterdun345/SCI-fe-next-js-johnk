@@ -1,4 +1,5 @@
 "use client"
+
 import { cn } from "@libs/utils";
 import SplitNumber from "./SplitNumber";
 import { MainPageType } from "@customTypes/MainPageTypes";
@@ -23,7 +24,7 @@ export default function HpOptionList({
               <SplitNumber text={option} className="text-[5px] sm:text-sm md:text-xl lg:text-2xl" />
             </div>
           </div>
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-2 transform whitespace-nowrap rounded bg-slate-900 p-2 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100 dark:bg-slate-100 dark:text-slate-900">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-2 whitespace-nowrap rounded bg-slate-900 p-2 text-white opacity-0 transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:opacity-100 dark:bg-slate-100 dark:text-slate-900">
             <p>{`HP = ${option}`}</p>
           </div>
         </div>

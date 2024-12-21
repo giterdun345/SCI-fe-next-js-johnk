@@ -7,7 +7,7 @@ import { MainPageType } from '@customTypes/MainPageTypes';
 
 export default function MainComponent({ hpOptions, errorMessage }: { hpOptions: MainPageType["hpOptions"], errorMessage: MainPageType["errorMessage"] }) {
     const [selectedHp, setSelectedHp] = useState<string>('');
-    // console.log(hpOptions)
+
     return (
         <div className="mt-3">
             <DropdownMain selected={selectedHp} onSelect={setSelectedHp} hpOptions={hpOptions} errorMessage={errorMessage} />

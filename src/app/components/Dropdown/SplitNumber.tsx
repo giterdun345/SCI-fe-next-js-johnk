@@ -6,6 +6,10 @@ interface SplitNumberProps {
     className?: string;
 }
 
+/**
+ * Selection using round buttons in a list, needs some seperation and cleaning up.
+ * Would be cool to have a light saber as a mouse icon to cut through the ball
+ */
 export default function SplitNumber({
     text = "0",
     className,

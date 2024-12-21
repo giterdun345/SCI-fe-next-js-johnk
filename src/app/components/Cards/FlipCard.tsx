@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
 import { cn } from "@libs/utils";
-import type { CardData } from "@customTypes/CardTypes";
 import OrientatedImage from './OrientatedImage';
+import CardBack from './CardBack';
+import type { CardData } from "@customTypes/CardTypes";
 
-interface FlipCardProps extends CardData, React.HTMLAttributes<HTMLDivElement> {
-  rotate?: "x" | "y";
-}
+interface FlipCardProps extends CardData, React.HTMLAttributes<HTMLDivElement> { }
 
-export default function FlipCard({ name: title, set, cost, power, hp, type, traits, rarity, frontArt, rotate = 'y', className, ...props }: FlipCardProps) {
+/**
+ *  This component takes the CardData and splits it between front card and back card. The Front card is the image
+ * and the rest of the props are seen on the back of the card. The dimensions of the image dictate the dimensions
+ * and orientation of the card.
+ *  
+ */
+export default function FlipCard({ name: title, set, cost, power, hp, type, traits, rarity, frontArt, className, ...props }: FlipCardProps) {
   const [orientation, setOrientation] = useState<'landscape' | 'portrait' | 'square' | null>(null);
-  const [rotationAngle, setRotationAngle] = useState(0); // Track random rotation angle
+  const [randomRotationAngle, setRandomRotation] = useState(0);
 
-  const cardClasses = cn(
+  const cardMainContainerClasses = cn(
     'group relative rounded-2xl transition-all duration-500 [perspective:1000px]',
     className,
     {
@@ -21,71 +25,42 @@ export default function FlipCard({ name: title, set, cost, power, hp, type, trai
     }
   );
 
-  const rotationClass: any = {
+  const rotationClassMap = {
     x: ["group-hover:[transform:rotateX(180deg)]", "[transform:rotateX(180deg)]"],
     y: ["group-hover:[transform:rotateY(180deg)]", "[transform:rotateY(180deg)]"],
   };
-  const self = rotationClass[rotate];
+
+  const rotationClass = rotationClassMap[Math.random() < 0.5 ? "x" : "y"]; // random pick of the x- left to right rotation or y- updown rotation
 
   const getRandomRotation = () => {
-    return Math.random() * 6 - 3; // Random value between -3 and 3
+    return Math.random() * 6 - 3; // Random value between -3 and 3 degrees
   };
 
-  // Set the random rotation when the component mounts
   useEffect(() => {
-    setRotationAngle(getRandomRotation());
+    setRandomRotation(getRandomRotation());
   }, []);
-  return (
-    <div className={cardClasses} style={{ transform: `rotate(${rotationAngle}deg)` }} {...props}>
 
+  return (
+    <div className={cardMainContainerClasses} style={{ transform: `rotate(${randomRotationAngle}deg)` }} {...props}>
       <div
         className={cn(
           "relative h-full rounded-2xl transition-all duration-500 [transform-style:preserve-3d]",
-          self[0],
+          rotationClass[0],
         )}
-
       >
-        {/* Front */}
-        <div className="absolute h-full w-full [backface-visibility:hidden]">
-          <OrientatedImage frontArt={frontArt} title={title} setOrientation={setOrientation} orientation={orientation} />
-
-          {/* <div className="absolute bottom-4 left-4 text-xl font-bold text-white">{title}</div> */}
-        </div>
-
-        {/* Back */}
+        {/* Front of the card is image*/}
+        <OrientatedImage frontArt={frontArt} title={title} setOrientation={setOrientation} />
         <div
           className={cn(
-            "absolute h-full w-full rounded-2xl bg-black/80 p-4 text-slate-200 [backface-visibility:hidden]",
-            self[1],
+            "absolute size-full rounded-2xl bg-black/80 p-1 text-slate-200 [backface-visibility:hidden] overflow-auto",
+            rotationClass[1],
           )}
         >
-          <div className="flex min-h-full flex-col gap-2">
-            <h1 className="text-xl font-bold text-white">{title}</h1>
-            <div className="group flex items-center gap-2">
-
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Set: {set}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Type: {type}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Traits: {traits}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Cost: {cost}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Power: {power}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                HP: {hp}
-              </p>
-              <p className="mt-1 border-t border-t-gray-200 py-4 text-base font-medium leading-normal text-gray-100">
-                Rarity: {rarity}
-              </p>
+          <div className="flex min-h-full flex-col gap-1">
+            <h1 className="text-xl font-bold text-white text-center">{title}</h1>
+            <div className="group flex flex-col items-center gap-1">
+              <CardBack set={set} type={type} traits={traits} cost={cost} power={power} hp={hp} rarity={rarity} />
             </div>
-
           </div>
         </div>
       </div>

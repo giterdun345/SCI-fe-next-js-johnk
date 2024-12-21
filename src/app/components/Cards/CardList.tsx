@@ -1,8 +1,8 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
-import Card from './Card';
-import type { CardData } from '../../types/CardTypes';
 import FlipCard from '@components/Cards/FlipCard';
+import type { CardData } from '../../types/CardTypes';
 
 type CardListProps = {
     hp: string;
@@ -32,7 +32,7 @@ export default function CardList({ hp }: CardListProps) {
                 const res = await fetch(`/api/search?hp=${encodeURIComponent(hp)}`);
                 if (!res.ok) throw new Error('Failed to fetch cards');
                 const data = await res.json();
-                // console.log("|-o-| CL: data", data);
+                console.log("|-o-| CL: data", data);
 
                 const formattedCards = Array.isArray(data.data)
                     ? data.data.map((card: any) => ({ // TODO: type response / clean up
@@ -78,7 +78,7 @@ export default function CardList({ hp }: CardListProps) {
         setSortKey(key);
         setCards([...cards].sort((a, b) => (a[key] > b[key] ? 1 : -1)));
     }
-    // console.log("|-o-| CL: cards", cards);
+    console.log("|-o-| CL: cards", cards);
 
     return (
         <section className="p-6">
@@ -103,18 +103,6 @@ export default function CardList({ hp }: CardListProps) {
                     <FlipCard key={card.id} {...card} />
                 ))}
             </div>
-
-            {/* <div className="flex flex-col sm:flex-row ...">
-  <div className="flex-1 ...">
-    ...
-  </div>
-  <div className="flex-1 ...">
-    ...
-  </div>
-  <div className="flex-1 ...">
-    ...
-  </div>
-</div> */}
         </section>
     );
 }

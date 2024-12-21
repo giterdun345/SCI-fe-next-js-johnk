@@ -1,33 +1,38 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
-interface WTF { width: number; height: number; orientation: any, }
-const OrientatedImage = ({ frontArt, title, orientation, setOrientation }: { frontArt: string, title: string, orientation: any; setOrientation: any }) => {
-    const [imageDimensions, setImageDimensions] = useState<WTF>({
+interface OrientatedImageProps {
+    frontArt: string;
+    title: string;
+    setOrientation: (orientation: "landscape" | "portrait") => void
+}
+
+/**
+ * A component that identifies the width and height on image load from DOM and
+ * applies an orientation not only to the image, but also to the card.
+ */
+const OrientatedImage = ({ frontArt, title, setOrientation }: OrientatedImageProps) => {
+    const [imageDimensions, setImageDimensions] = useState({
         width: 300,
         height: 300,
-        orientation: 'portrait',
-
     });
 
-    // Handle image loading to set width/height based on orientation
-    const handleImageLoad = (e: any) => {
+    const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        // @ts-expect-error 
         const { naturalWidth, naturalHeight } = e.target;
-        console.log(naturalWidth, naturalHeight)
         if (naturalWidth > naturalHeight) {
 
-            setImageDimensions({ width: 450, height: 300, orientation: 'landscape' });
+            setImageDimensions({ width: 450, height: 300 });
             setOrientation("landscape")
         } else if (naturalWidth < naturalHeight) {
 
-            setImageDimensions({ width: 300, height: 300, orientation: 'portrait' });
+            setImageDimensions({ width: 300, height: 300, });
             setOrientation("portrait")
         }
     };
 
     return (
-        <div className="relative">
-            {/* Image with onLoad event to determine dimensions */}
+        <div className="absolute size-full [backface-visibility:hidden]">
             <Image
                 src={frontArt}
                 alt={title}
@@ -36,11 +41,6 @@ const OrientatedImage = ({ frontArt, title, orientation, setOrientation }: { fro
                 className="object-cover rounded-lg"
                 onLoad={handleImageLoad}
             />
-
-            {/* Optionally display orientation */}
-            <div className="absolute bottom-4 left-4 text-xl font-bold text-white">
-                {title} - {imageDimensions.orientation}
-            </div>
         </div>
     );
 };

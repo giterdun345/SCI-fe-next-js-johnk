@@ -4,6 +4,9 @@ import { useEffect, useRef, useState, ReactNode } from "react";
 import { cn } from "@libs/utils";
 import { useTheme } from "next-themes";
 
+/**
+ * A component that uses animata for animating beams of light for the header. 
+ */
 function Beam({ index }: { index: number }) {
     const { theme } = useTheme()
     const flag = index % 8 === 0;
